@@ -29,10 +29,12 @@ func testConfig() *Config {
 
 	// Set a short reconnect interval so that it can run a lot during tests
 	config.ReconnectInterval = 100 * time.Millisecond
+	config.RetryJoinInterval = 100 * time.Millisecond
 
 	// Set basically zero on the reconnect/tombstone timeouts so that
 	// they're removed on the first ReapInterval.
 	config.ReconnectTimeout = 1 * time.Microsecond
+	config.RetryJoinTimeout = 1 * time.Microsecond
 	config.TombstoneTimeout = 1 * time.Microsecond
 
 	return config

@@ -304,6 +304,8 @@ func TestMergeConfig(t *testing.T) {
 		Interface:             "eth0",
 		ReconnectInterval:     15 * time.Second,
 		ReconnectTimeout:      48 * time.Hour,
+		RetryJoinInterval:     15 * time.Second,
+		RetryJoinTimeout:      48 * time.Hour,
 		RPCAuthKey:            "foobar",
 		DisableNameResolution: true,
 		TombstoneTimeout:      36 * time.Hour,
@@ -352,6 +354,14 @@ func TestMergeConfig(t *testing.T) {
 	}
 
 	if c.ReconnectTimeout != 48*time.Hour {
+		t.Fatalf("bad: %#v", c)
+	}
+
+	if c.RetryJoinInterval != 15*time.Second {
+		t.Fatalf("bad: %#v", c)
+	}
+
+	if c.RetryJoinTimeout != 48*time.Hour {
 		t.Fatalf("bad: %#v", c)
 	}
 

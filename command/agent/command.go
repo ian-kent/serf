@@ -247,6 +247,12 @@ func (c *Command) setupAgent(config *Config, logOutput io.Writer) *Agent {
 	if config.ReconnectTimeout != 0 {
 		serfConfig.ReconnectTimeout = config.ReconnectTimeout
 	}
+	if config.RetryJoinInterval != 0 {
+		serfConfig.RetryJoinInterval = config.RetryJoinInterval
+	}
+	if config.RetryJoinTimeout != 0 {
+		serfConfig.RetryJoinTimeout = config.RetryJoinTimeout
+	}
 	if config.TombstoneTimeout != 0 {
 		serfConfig.TombstoneTimeout = config.TombstoneTimeout
 	}

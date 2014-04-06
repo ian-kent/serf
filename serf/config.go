@@ -102,6 +102,19 @@ type Config struct {
 	ReconnectTimeout  time.Duration
 	TombstoneTimeout  time.Duration
 
+	// The settings below relate to Serf keeping track of nodes
+	// specified using -retry-join configuration option which failed
+	// to connect on startup.
+	// 
+	// RetryJoinInterval is the interval when we attempt to reconnect
+	// to failed nodes. If this is not set (it is zero), it will be set
+	// to a reasonable default.
+	//
+	// RetryJoinTimeout is the amount of time to attempt to reconnect to
+	// a failed node before giving up and considering it unavailable.
+	RetryJoinInterval time.Duration
+	RetryJoinTimeout  time.Duration
+
 	// QueueDepthWarning is used to generate warning message if the
 	// number of queued messages to broadcast exceeds this number. This
 	// is to provide the user feedback if events are being triggered
@@ -209,6 +222,8 @@ func DefaultConfig() *Config {
 		RecentIntentBuffer:           128,
 		ReconnectInterval:            30 * time.Second,
 		ReconnectTimeout:             24 * time.Hour,
+		RetryJoinInterval:            30 * time.Second,
+		RetryJoinTimeout:             24 * time.Hour,
 		QueueDepthWarning:            128,
 		MaxQueueDepth:                4096,
 		TombstoneTimeout:             24 * time.Hour,

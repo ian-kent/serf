@@ -148,6 +148,17 @@ type Config struct {
 	ReconnectTimeoutRaw string        `mapstructure:"reconnect_timeout"`
 	ReconnectTimeout    time.Duration `mapstructure:"-"`
 
+	// RetryJoinIntervalRaw is the string retry join interval time. This interval
+	// controls how often we attempt to join an unavailable node.
+	RetryJoinIntervalRaw string        `mapstructure:"retry_join_interval"`
+	RetryJoinInterval    time.Duration `mapstructure:"-"`
+
+	// RetryJoinTimeoutRaw is the string retry join timeout. This timeout controls
+	// for how long we attempt to connect to an unavailable node before removing
+	// it from the cluster.
+	RetryJoinTimeoutRaw string        `mapstructure:"retry_join_timeout"`
+	RetryJoinTimeout    time.Duration `mapstructure:"-"`
+
 	// TombstoneTimeoutRaw is the string tombstone timeout. This timeout controls
 	// for how long we remember a left node before removing it from the cluster.
 	TombstoneTimeoutRaw string        `mapstructure:"tombstone_timeout"`
