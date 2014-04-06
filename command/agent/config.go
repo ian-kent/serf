@@ -98,6 +98,12 @@ type Config struct {
 	// addresses, then the agent will error and exit.
 	StartJoin []string `mapstructure:"start_join"`
 
+	// RetryJoin is a list of addresses to attempt to join when the
+	// agent starts, like StartJoin. However, if Serf is unable to 
+	// communicate with any of these addresses, then the agent will 
+	// continue trying instead of exiting.
+	RetryJoin []string `mapstructure:"retry_join"`
+
 	// EventHandlers is a list of event handlers that will be invoked.
 	// These can be updated during a reload.
 	EventHandlers []string `mapstructure:"event_handlers"`
@@ -354,6 +360,11 @@ func MergeConfig(a, b *Config) *Config {
 	result.StartJoin = make([]string, 0, len(a.StartJoin)+len(b.StartJoin))
 	result.StartJoin = append(result.StartJoin, a.StartJoin...)
 	result.StartJoin = append(result.StartJoin, b.StartJoin...)
+
+	// Copy the retry join addresses
+	result.RetryJoin = make([]string, 0, len(a.RetryJoin)+len(b.RetryJoin))
+	result.RetryJoin = append(result.RetryJoin, a.RetryJoin...)
+	result.RetryJoin = append(result.RetryJoin, b.RetryJoin...)
 
 	return &result
 }

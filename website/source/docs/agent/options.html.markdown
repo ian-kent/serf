@@ -214,6 +214,9 @@ at a single JSON object with configuration within it.
 
 * `replay_on_join` - Equivalent to the `-replay` command-line flag.
 
+* `retry_join` - An array of strings specifying addresses of nodes to
+  join upon startup, which doesn't exit on failure.
+
 * `snapshot_path` - Equivalent to the `-snapshot` command-line flag.
 
 * `leave_on_terminate` - If enabled, when the agent receives a TERM signal,

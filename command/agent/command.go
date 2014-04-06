@@ -52,6 +52,8 @@ func (c *Command) readConfig() *Config {
 		"command to execute when events occur")
 	cmdFlags.Var((*AppendSliceValue)(&cmdConfig.StartJoin), "join",
 		"address of agent to join on startup")
+	cmdFlags.Var((*AppendSliceValue)(&cmdConfig.RetryJoin), "retry-join",
+		"address of agent to join on startup")
 	cmdFlags.BoolVar(&cmdConfig.ReplayOnJoin, "replay", false,
 		"replay events for startup join")
 	cmdFlags.StringVar(&cmdConfig.LogLevel, "log-level", "", "log level")
@@ -357,14 +359,28 @@ func (c *Command) startAgent(config *Config, agent *Agent,
 
 // startupJoin is invoked to handle any joins specified to take place at start time
 func (c *Command) startupJoin(config *Config, agent *Agent) error {
-	if len(config.StartJoin) == 0 {
+	if len(config.StartJoin) == 0 && len(config.RetryJoin) == 0 {
 		return nil
 	}
 
 	c.Ui.Output(fmt.Sprintf("Joining cluster...(replay: %v)", config.ReplayOnJoin))
-	n, err := agent.Join(config.StartJoin, config.ReplayOnJoin)
-	if err != nil {
-		return err
+	
+	n := 0
+
+	if len(config.StartJoin) > 0 {
+		n2, err := agent.Join(config.StartJoin, config.ReplayOnJoin)
+		n += n2
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(config.RetryJoin) > 0 {
+		n2, err := agent.Join(config.RetryJoin, config.ReplayOnJoin)
+		n += n2
+		if err != nil {
+			c.Ui.Error(err.Error())
+		}
 	}
 
 	c.Ui.Info(fmt.Sprintf("Join completed. Synced with %d initial agents", n))
@@ -555,6 +571,8 @@ Options:
                            be specified multiple times. See the event scripts
                            section below for more info.
   -join=addr               An initial agent to join with. This flag can be
+                           specified multiple times.
+  -retry-join=addr         An initial agent to join with. This flag can be
                            specified multiple times.
   -log-level=info          Log level of the agent.
   -node=hostname           Name of this node. Must be unique in the cluster

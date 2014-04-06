@@ -287,6 +287,7 @@ func TestMergeConfig(t *testing.T) {
 		Protocol:      7,
 		EventHandlers: []string{"foo"},
 		StartJoin:     []string{"foo"},
+		RetryJoin:     []string{"foo"},
 		ReplayOnJoin:  true,
 	}
 
@@ -296,6 +297,7 @@ func TestMergeConfig(t *testing.T) {
 		EncryptKey:            "foo",
 		EventHandlers:         []string{"bar"},
 		StartJoin:             []string{"bar"},
+		RetryJoin:             []string{"bar"},
 		LeaveOnTerm:           true,
 		SkipLeaveOnInt:        true,
 		Discover:              "tubez",
@@ -371,6 +373,10 @@ func TestMergeConfig(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(c.StartJoin, expected) {
+		t.Fatalf("bad: %#v", c)
+	}
+
+	if !reflect.DeepEqual(c.RetryJoin, expected) {
 		t.Fatalf("bad: %#v", c)
 	}
 }
